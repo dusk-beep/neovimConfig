@@ -7,7 +7,8 @@ return {
         "hrsh7th/cmp-cmdline",         -- Command line completion source
         "saadparwaiz1/cmp_luasnip",    -- Snippet completion source
         "L3MON4D3/LuaSnip",            -- Snippet engine
-        "neovim/nvim-lspconfig",       -- LSP configuration
+        "neovim/nvim-lspconfig",       -- LSP Configuration
+         "williamboman/mason.nvim",
     },
     config = function()
         local cmp = require('cmp')
