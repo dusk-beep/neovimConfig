@@ -1,47 +1,55 @@
 return {
-    "hrsh7th/nvim-cmp",                -- Completion framework
-    dependencies = {
-        "hrsh7th/cmp-nvim-lsp",        -- LSP source for nvim-cmp
-        "hrsh7th/cmp-buffer",          -- Buffer completion source
-        "hrsh7th/cmp-path",            -- Path completion source
-        "hrsh7th/cmp-cmdline",         -- Command line completion source
-        "saadparwaiz1/cmp_luasnip",    -- Snippet completion source
-        "L3MON4D3/LuaSnip",            -- Snippet engine
-        "neovim/nvim-lspconfig",       -- LSP Configuration
-         "williamboman/mason.nvim",
-    },
-    config = function()
-        local cmp = require('cmp')
+  "hrsh7th/nvim-cmp",  -- Completion framework
+  dependencies = {
+    "hrsh7th/cmp-buffer",  -- Buffer completion source
+    "saadparwaiz1/cmp_luasnip",  -- Snippet completion source
+    "L3MON4D3/LuaSnip",  -- Snippet engine
+    "rafamadriz/friendly-snippets",  -- Collection of snippets for different languages
+  },
+  config = function()
+    local cmp = require('cmp')
+    local luasnip = require('luasnip')
 
-        cmp.setup({
-            snippet = {
-                expand = function(args)
-                    require('luasnip').lsp_expand(args.body) -- For luasnip users.
-                end,
-            },
-            mapping = {
-                ['Down'] = cmp.mapping.select_next_item(),
-                ['Up'] = cmp.mapping.select_prev_item(),
-                ['<CR>'] = cmp.mapping.confirm({ select = true }),
-                ['<C-Space>'] = cmp.mapping.complete(),
-            },
-            sources = {
-                { name = 'buffer' },
-                { name = 'nvim_lsp' },
-                { name = 'path' },
-                { name = 'luasnip' },
-            },
-        })
+    -- Load VS Code-style snippets (optional)
+    require("luasnip.loaders.from_vscode").lazy_load()
 
-        -- LSP Configuration
-        --[[local capabilities = require('cmp_nvim_lsp').default_capabilities()
-        require('lspconfig').lua_ls.setup({
-            capabilities = capabilities,
-        })
---]]
-        -- Additional language servers can be added similarly
-        -- require('lspconfig').another_language_server.setup({
-        --     capabilities = capabilities,
-        -- })
-    end
+    cmp.setup({
+      snippet = {
+        expand = function(args)
+          luasnip.lsp_expand(args.body)  -- Expand the snippet
+        end,
+      },
+      mapping = {
+        ['<Tab>'] = function(fallback)
+          if cmp.visible() then
+            cmp.select_next_item()  -- Cycle through completion suggestions
+          elseif luasnip.expand_or_jumpable() then
+            luasnip.expand_or_jump()  -- Jump to the next placeholder in snippets
+          else
+            fallback()  -- Default fallback (indent)
+          end
+        end,
+        ['<S-Tab>'] = function(fallback)
+          if cmp.visible() then
+            cmp.select_prev_item()  -- Cycle backward through completion suggestions
+          elseif luasnip.jumpable(-1) then
+            luasnip.jump(-1)  -- Jump to the previous placeholder in snippets
+          else
+            fallback()  -- Default fallback (outdent)
+          end
+        end,
+        ['<CR>'] = cmp.mapping.confirm({ select = true }),  -- Confirm completion with Enter
+        ['<C-Space>'] = cmp.mapping.complete(),  -- Manually trigger completion
+      },
+      sources = {
+        { name = 'buffer' },  -- Use current buffer for completion
+        { name = 'luasnip' },  -- Snippet completion
+      },
+      window = {
+        completion = {
+          col_offset = -3,  -- Adjust the position of the completion window
+        },
+      },
+    })
+  end,
 }
