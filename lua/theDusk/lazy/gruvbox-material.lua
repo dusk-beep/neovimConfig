@@ -11,7 +11,6 @@ return {
             vim.gruvbox_material_ui_contrast = 'low'
             vim.g.gruvbox_material_better_performance = 1
             vim.g.gruvbox_material_enable_bold = 1
-
             -- Load the colorscheme
             vim.cmd.colorscheme('gruvbox-material')
             vim.cmd('highlight LineNr guifg=#e78a4e')

@@ -27,8 +27,3 @@ vim.opt.colorcolumn = "80"
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
--- Toggle Neotree and current window focus
-vim.api.nvim_set_keymap('n', '<leader>n', [[
-  lua require('neo-tree').toggle() 
-  vim.cmd('wincmd p')  -- Switch focus back to previous window
-]], { noremap = true, silent = true })
