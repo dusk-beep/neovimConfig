@@ -26,7 +26,7 @@ vim.keymap.set("n","<C-k>","<C-w>k",{silent = true})
 vim.keymap.set("n","<C-j>","<C-w>j",{silent = true})
 
 vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]], { noremap = true, silent = true })
-
+vim.keymap.set({"n", "i"}, "~", "<S-Tab>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>bp', ':bprevious<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>bn', ':bnext<CR>', { noremap = true, silent = true })
 

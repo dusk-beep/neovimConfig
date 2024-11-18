@@ -7,7 +7,7 @@ return {
             -- A list of parser names, or "all"
             ensure_installed = {
                 "vimdoc", "javascript", "typescript", "c", "lua", "rust",
-                "jsdoc", "bash", "java", "cpp", "python",
+                "jsdoc", "bash", "java", "cpp", "python"
             },
 
             -- Install parsers synchronously (only applied to `ensure_installed`)
@@ -24,6 +24,16 @@ return {
                 enable = true,
                 additional_vim_regex_highlighting = { "markdown" },
             },
+
+          incremental_selection = {
+            enable = true,
+            keymaps = {
+                 init_selection = "<leader>ss",
+                  node_incremental = "<leader>nn",
+                  node_decremental = "<leader>np",
+                 scope_incremental = "<leader>sn",
+               },
+             }, 
 
             -- Textobjects configuration
             textobjects = {
