@@ -18,7 +18,7 @@ return {
             },
           },
           window = {
-                position = "bottom"
+                position = "current"
             }
         })
     end,
