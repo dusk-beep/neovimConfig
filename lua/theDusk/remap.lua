@@ -13,7 +13,6 @@ vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
 vim.keymap.set("n","<leader>m","k$o",{silent = true})
 
-vim.keymap.set("i", "~", "<Esc>")
 vim.keymap.set("n","<leader>fc",":!astyle --indent=tab=2 --style=java --pad-oper %<CR>")
 
 vim.keymap.set("n","<leader>cc",":!g++ %<CR>")
@@ -26,6 +25,8 @@ vim.keymap.set("n", "<leader>s", ":w<CR>", {silent = true})
 vim.keymap.set("n","<C-k>","<C-w>k",{silent = true})
 vim.keymap.set("n","<C-j>","<C-w>j",{silent = true})
 
+vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]], { noremap = true, silent = true })
+vim.keymap.set({"n", "i"}, "~", "<S-Tab>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>bp', ':bprevious<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>bn', ':bnext<CR>', { noremap = true, silent = true })
 

@@ -8,7 +8,12 @@ vim.opt.expandtab = true
 
 --vim.opt.smartindent = true
 
+-- Enable line wrapping with smart options
 vim.opt.wrap = true
+vim.opt.breakindent = true
+vim.opt.showbreak = string.rep(" ", 3)
+vim.opt.linebreak = true
+
 vim.opt.swapfile = false
 vim.opt.backup = false
 vim.opt.undofile = false
@@ -27,8 +32,14 @@ vim.opt.colorcolumn = "80"
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
--- Toggle Neotree and current window focus
-vim.api.nvim_set_keymap('n', '<leader>n', [[
-  lua require('neo-tree').toggle() 
-  vim.cmd('wincmd p')  -- Switch focus back to previous window
-]], { noremap = true, silent = true })
+
+vim.opt.undodir = vim.fn.stdpath("config") .. "/undo"
+vim.opt.undofile = true  -- Enable persistent undo
+-- Optional: Maximum number of undo levels
+vim.opt.undolevels = 250
+
+vim.api.nvim_create_autocmd("VimLeave", {
+  callback = function()
+    require("harpoon.mark").clear_all()
+  end
+})
