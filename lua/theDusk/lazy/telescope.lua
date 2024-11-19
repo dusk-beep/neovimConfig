@@ -9,6 +9,12 @@ return {
 
     config = function()
         require('telescope').setup({})
+        defaults = {
+      mappings = {
+        i = { ["~"] = "move_selection_previous" }, -- Insert mode
+        n = { ["~"] = "move_selection_next" }  -- Normal mode
+      }
+  } 
 
         local builtin = require('telescope.builtin')
         vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
