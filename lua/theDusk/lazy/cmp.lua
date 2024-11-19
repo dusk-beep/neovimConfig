@@ -56,12 +56,6 @@ return {
           { name = 'buffer', priority = 1000 },  -- Buffer completions
           { name = 'nvim_lsp', priority = 100 },  -- LSP completions
         },
-        sources = {
-
-          { name = 'buffer' ,priority= 1000},    -- Buffer completions
-          { name = 'nvim_lsp' ,priority= 100},  -- LSP completions
-          --   { name = 'luasnip' ,priority = -100 }-- Snippet completions
-        },
         completion = {
           completeopt = 'menuone,noinsert,noselect',  -- Disable auto-completion window
           max_item_count = 10,
@@ -87,7 +81,24 @@ return {
           vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
           vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
           vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
+          vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Go to next diagnostic" })
+          vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Go to previous diagnostic" })
+
         end,
+      })
+
+          -- Configure tsserver (JavaScript/TypeScript LSP)
+      lspconfig.ts_ls.setup({
+        capabilities = capabilities,
+        on_attach = function(client, bufnr)
+          local opts = { noremap = true, silent = true, buffer = bufnr }
+          vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)  -- Go to definition
+          vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)        -- Show hover info
+          vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)  -- Rename symbol
+          vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Go to next diagnostic" })
+          vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Go to previous diagnostic" })
+        end,
+
       })
     end,
   },
