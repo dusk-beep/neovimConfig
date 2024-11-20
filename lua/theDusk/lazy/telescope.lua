@@ -12,7 +12,7 @@ return {
         defaults = {
       mappings = {
         i = { ["~"] = "move_selection_previous" }, -- Insert mode
-        n = { ["~"] = "move_selection_next" }  -- Normal mode
+        i= { ["~"] = "move_selection_next" }  -- Normal mode
       }
   } 
 
