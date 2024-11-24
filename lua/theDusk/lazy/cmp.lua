@@ -16,9 +16,24 @@ return {
       -- Make sure your snippets are loaded correctly
       require("luasnip.loaders.from_vscode").lazy_load()
 
-
       -- Complete cmp setup with Tab and Shift-Tab for cycling through completions
       cmp.setup({
+        snippet = {
+          expand = function(args)
+            require("luasnip").lsp_expand(args.body)
+          end,
+        },
+        enabled = function()
+          -- disable completion in comments
+          local context = require 'cmp.config.context'
+          -- keep command mode completion enabled when cursor is in a comment
+          if vim.api.nvim_get_mode().mode == 'c' then
+            return true
+          else
+            return not context.in_treesitter_capture("comment") 
+              and not context.in_syntax_group("Comment")
+          end
+        end,
         formatting = {
           format = function(entry, vim_item)
             vim_item.abbr = string.sub(vim_item.abbr, 1, 5)
@@ -26,23 +41,42 @@ return {
           end
         },
         mapping = {
-          -- Cycle forward through completion items (buffer, LSP, etc.)
-          ['<Tab>'] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-              cmp.select_next_item()  -- Cycle to the next completion item
-            else
-              fallback()  -- If no completion menu is visible, fall back to the default action (indent)
-            end
-          end, {'i', 's','n'}),  -- For insert and select modes
 
-          -- Cycle backward through completion items
-          ['~'] = cmp.mapping(function(fallback)
+          ['<CR>'] = cmp.mapping(function(fallback)
             if cmp.visible() then
-              cmp.select_prev_item()  -- Cycle to the previous completion item
+              if luasnip.expandable() then
+                luasnip.expand()
+              else
+                cmp.confirm({
+                  select = true,
+                })
+              end
             else
-              fallback()  -- Default fallback (outdent)
+              fallback()
             end
-          end, {'i', 'n'}),
+          end),
+
+          ["<Tab>"] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+              cmp.select_next_item()
+            elseif luasnip.locally_jumpable(1) then
+              luasnip.jump(1)
+            else
+              fallback()
+            end
+          end, { "i", "s" }),
+
+          ["~"] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+              cmp.select_prev_item()
+            elseif luasnip.locally_jumpable(-1) then
+              luasnip.jump(-1)
+            else
+              fallback()
+            end
+          end, { "i", "s" }),
+
+
 
           ['<C-g>'] = function()
             if cmp.visible_docs() then
@@ -65,14 +99,14 @@ return {
           end, {'i', 's'}),
 
           -- Optional: Confirm completion with Enter
-          ['<CR>'] = cmp.mapping.confirm({ select = true }),
+          --['<CR>'] = cmp.mapping.confirm({ select = true }),
         },
 
         -- Sources for completion
         sources = {
           { name = 'buffer' ,max_item_count = 5 },  -- Buffer completions
           { name = 'nvim_lsp',max_item_count = 5 },  -- LSP completions
-          {name = 'snippet',max_item_count=5}
+          {name = 'luasnip',max_item_count=2}
         },
         completion = {
           completeopt = 'menuone,noinsert,noselect',  -- Disable auto-completion window
@@ -86,7 +120,6 @@ return {
           documentation = cmp.config.window.bordered({
             border = "rounded",
             max_height=50,
-            winblend=40,
 
           }),
         },

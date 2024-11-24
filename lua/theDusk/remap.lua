@@ -24,10 +24,11 @@ vim.keymap.set("n","<leader>he",":@:-<CR>");
 vim.keymap.set("n", "<leader>s", ":w<CR>", {silent = true})
 vim.keymap.set("n","<C-k>","<C-w>k",{silent = true})
 vim.keymap.set("n","<C-j>","<C-w>j",{silent = true})
+vim.api.nvim_set_keymap('n', '<leader>np', "f,;t,;", { noremap = true, silent = true })
 
 vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]], { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>bp', ':bprevious<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>bn', ':bnext<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', 'B', ':bprevious<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', 'N', ':bnext<CR>', { noremap = true, silent = true })
 
 vim.api.nvim_create_autocmd("BufWritePre", {
     pattern = "*.java",  -- Apply to Java files
