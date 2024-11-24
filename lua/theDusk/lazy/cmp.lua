@@ -30,13 +30,16 @@ return {
           end, {'i', 's'}),  -- For insert and select modes
 
           -- Cycle backward through completion items
-          ['<S-Tab>'] = cmp.mapping(function(fallback)
+          ['~'] = cmp.mapping(function(fallback)
             if cmp.visible() then
               cmp.select_prev_item()  -- Cycle to the previous completion item
             else
               fallback()  -- Default fallback (outdent)
             end
           end, {'i', 's'}),
+
+          ['<C-k>'] = cmp.mapping.scroll_docs(-4),
+          ['<C-j>'] = cmp.mapping.scroll_docs(4),
 
           -- You can keep this for snippet expansion (if you are using luasnip)
           ['@'] = cmp.mapping(function(fallback)

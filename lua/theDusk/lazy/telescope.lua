@@ -11,8 +11,15 @@ return {
         require('telescope').setup({})
         defaults = {
       mappings = {
-        i = { ["~"] = "move_selection_previous" }, -- Insert mode
-        i= { ["~"] = "move_selection_next" }  -- Normal mode
+        n ={
+          ["j"] = "move_selection_next",
+          ["k"] = "move_selection_previous"
+        },
+        i ={
+          ["<C-j>"] = "move_selection_next",
+          ["<C-k>"] = "move_selection_previous"
+
+        }
       }
   } 
 
@@ -20,7 +27,7 @@ return {
         vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
         vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })
 
-        vim.keymap.set('n', '<C-p>', builtin.git_files, {})
+        vim.keymap.set('n', '<leader>fg', builtin.git_files, {})
         vim.keymap.set('n', '<leader>pws', function()
             local word = vim.fn.expand("<cword>")
             builtin.grep_string({ search = word })
