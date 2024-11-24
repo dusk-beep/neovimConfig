@@ -23,7 +23,7 @@ vim.opt.incsearch = true
 
 vim.opt.termguicolors = true
 
-vim.opt.scrolloff = 8   
+vim.opt.scrolloff = 8
 
 vim.opt.updatetime = 50
 
@@ -48,12 +48,23 @@ vim.api.nvim_create_autocmd("LspAttach", {
   callback = function(args)
     local bufnr = args.buf
     local client = vim.lsp.get_client_by_id(args.data.client_id)
-    if vim.tbl_contains({ 'null-ls' }, client.name) then  -- blacklist lsp
+
+    -- Skip blacklisted clients (e.g., null-ls)
+    if vim.tbl_contains({ "null-ls" }, client.name) then
       return
     end
+
+    -- Attach lsp_signature
     require("lsp_signature").on_attach({
-      -- ... setup options here ...
+      bind = true, -- Ensure it's bound to the buffer
+      floating_window = true, -- Show signature in floating window
+      hint_enable = true, -- Enable virtual text hints
+      hint_prefix = "🐾 ", -- Add a prefix to the virtual text
+      handler_opts = {
+        border = "rounded", -- Rounded border for the floating window
+      },
+      zindex = 50, -- Floating window z-index
+      toggle_key = "<M-x>", -- Key to toggle signature display
     }, bufnr)
   end,
 })
-
