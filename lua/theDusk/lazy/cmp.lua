@@ -17,6 +17,31 @@ return {
       require("luasnip.loaders.from_vscode").lazy_load()
 
       -- Complete cmp setup with Tab and Shift-Tab for cycling through completions
+      --
+
+      local current_source_index = 1 -- Tracks the active source index
+      local sources_list = {
+        { name = 'buffer' ,max_item_count = 5 },  -- Buffer completions
+        { name = 'nvim_lsp',max_item_count = 5 },  -- LSP completions
+        {name = 'luasnip',max_item_count=2},
+      }
+
+local function cycle_sources(direction)
+  -- Calculate the new index
+  current_source_index = current_source_index + direction
+  if current_source_index > #sources_list then
+    current_source_index = 1
+  elseif current_source_index < 1 then
+    current_source_index = #sources_list
+  end
+
+  -- Update cmp's sources dynamically
+  require("cmp").setup.buffer({
+    sources = { sources_list[current_source_index] },
+  })
+  print("Switched to: " .. sources_list[current_source_index].name)
+end
+
       cmp.setup({
         snippet = {
           expand = function(args)
@@ -36,11 +61,15 @@ return {
         end,
         formatting = {
           format = function(entry, vim_item)
-            vim_item.abbr = string.sub(vim_item.abbr, 1, 5)
+            vim_item.abbr = string.sub(vim_item.abbr, 1, 20)
             return vim_item
           end
         },
         mapping = {
+
+
+          [">"] = function() cycle_sources(1) end,
+          ["<"] = function() cycle_sources(-1) end,
 
           ['<CR>'] = cmp.mapping(function(fallback)
             if cmp.visible() then
@@ -103,11 +132,7 @@ return {
         },
 
         -- Sources for completion
-        sources = {
-          { name = 'buffer' ,max_item_count = 5 },  -- Buffer completions
-          { name = 'nvim_lsp',max_item_count = 5 },  -- LSP completions
-          {name = 'luasnip',max_item_count=2}
-        },
+        sources = sources_list,
         completion = {
           completeopt = 'menuone,noinsert,noselect',  -- Disable auto-completion window
           max_height = 10,
