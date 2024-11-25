@@ -109,9 +109,9 @@ return {
 
         -- Sources for completion
         sources = {
-          { name = "buffer",                 max_item_count = 5 },
+          --  { name = "buffer", max_item_count = 5 },
           { name = "nvim_lsp",               max_item_count = 10 },
-          { name = "luasnip",                max_item_count = 5 },
+          { name = "luasnip",                max_item_count = 3 },
           { name = 'nvim_lsp_signature_help' },
         },
         completion = {
@@ -132,7 +132,8 @@ return {
       })
       -- Configure LSP servers
       local lspconfig = require("lspconfig")
-      local capabilities = cmp_nvim_lsp.default_capabilities()
+      --local capabilities = cmp_nvim_lsp.default_capabilities()
+      local capabilities = vim.lsp.protocol.make_client_capabilities()
 
       -- Example: Configure clangd
       lspconfig.clangd.setup({
