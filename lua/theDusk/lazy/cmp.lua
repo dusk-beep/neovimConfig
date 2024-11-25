@@ -1,12 +1,13 @@
 return {
   {
-    "hrsh7th/nvim-cmp", -- Completion framework
+    "hrsh7th/nvim-cmp",               -- Completion framework
     dependencies = {
-      "hrsh7th/cmp-buffer", -- Buffer completion source
-      "hrsh7th/cmp-nvim-lsp", -- LSP completion source
-      "saadparwaiz1/cmp_luasnip", -- Snippet completion source
-      "L3MON4D3/LuaSnip", -- Snippet engine
+      "hrsh7th/cmp-buffer",           -- Buffer completion source
+      "hrsh7th/cmp-nvim-lsp",         -- LSP completion source
+      "saadparwaiz1/cmp_luasnip",     -- Snippet completion source
+      "L3MON4D3/LuaSnip",             -- Snippet engine
       "rafamadriz/friendly-snippets", -- Collection of snippets
+      "hrsh7th/cmp-nvim-lsp-signature-help"
     },
     config = function()
       local cmp = require("cmp")
@@ -32,8 +33,8 @@ return {
           if vim.api.nvim_get_mode().mode == 'c' then
             return true
           else
-            return not context.in_treesitter_capture("comment") 
-              and not context.in_syntax_group("Comment")
+            return not context.in_treesitter_capture("comment")
+                and not context.in_syntax_group("Comment")
           end
         end,
         formatting = {
@@ -96,11 +97,11 @@ return {
           -- You can keep this for snippet expansion (if you are using luasnip)
           ['@'] = cmp.mapping(function(fallback)
             if luasnip.expand_or_jumpable() then
-              luasnip.expand_or_jump()  -- Expand or jump to the next snippet placeholder
+              luasnip.expand_or_jump() -- Expand or jump to the next snippet placeholder
             else
-              fallback()  -- If no snippet, fall back to default action (e.g., indent)
+              fallback()               -- If no snippet, fall back to default action (e.g., indent)
             end
-          end, {'i', 's'}),
+          end, { 'i', 's' }),
 
           -- Optional: Confirm completion with Enter
           --['<CR>'] = cmp.mapping.confirm({ select = true }),
@@ -108,15 +109,15 @@ return {
 
         -- Sources for completion
         sources = {
-          {name="buffer",max_item_count=5},
-          {name="nvim_lsp",max_item_count=10},
-          {name="luasnips",max_item_count=5},
-
+          { name = "buffer",                 max_item_count = 5 },
+          { name = "nvim_lsp",               max_item_count = 10 },
+          { name = "luasnip",                max_item_count = 5 },
+          { name = 'nvim_lsp_signature_help' },
         },
         completion = {
-          completeopt = 'menuone,noinsert,noselect',  -- Disable auto-completion window
+          completeopt = 'menuone,noinsert,noselect', -- Disable auto-completion window
           max_height = 10,
-          max_width=30,
+          max_width = 30,
         },
         window = {
           completion = cmp.config.window.bordered({
@@ -124,7 +125,7 @@ return {
           }),
           documentation = cmp.config.window.bordered({
             border = "rounded",
-            max_height=50,
+            max_height = 50,
 
           }),
         },
@@ -143,7 +144,6 @@ return {
           vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
           vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Go to next diagnostic" })
           vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Go to previous diagnostic" })
-
         end,
       })
 
@@ -152,34 +152,47 @@ return {
         capabilities = capabilities,
         on_attach = function(client, bufnr)
           local opts = { noremap = true, silent = true, buffer = bufnr }
-          vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)  -- Go to definition
-          vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)        -- Show hover info
-          vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)  -- Rename symbol
+          vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)     -- Go to definition
+          vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)           -- Show hover info
+          vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts) -- Rename symbol
           vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Go to next diagnostic" })
           vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Go to previous diagnostic" })
         end,
 
       })
 
-      lspconfig.rust_analyzer.setup({
-        capabilities = capabilities, -- Reuse existing capabilities (like autocompletion support)
+      require('lspconfig').rust_analyzer.setup({
+        capabilities = capabilities,
         on_attach = function(client, bufnr)
+          -- Key mappings for LSP actions
           local opts = { noremap = true, silent = true, buffer = bufnr }
-
-          -- Key mappings
-          vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts) -- Go to definition
-          vim.keymap.set("n", "K", vim.lsp.buf.hover, opts) -- Show hover info
-          vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts) -- Rename symbol
-          vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Go to next diagnostic" })
-          vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Go to previous diagnostic" })
+          vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+          vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+          vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
+          vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
+          vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
         end,
         settings = {
           ["rust-analyzer"] = {
+            -- Enable `clippy` checks on save
             checkOnSave = {
-              command = "clippy", -- Use clippy for linting
+              command = "clippy",
             },
           },
-        }})
+        },
+      })
+
+
+      for _, method in ipairs({ 'textDocument/diagnostic', 'workspace/diagnostic' }) do
+        local default_diagnostic_handler = vim.lsp.handlers[method]
+        vim.lsp.handlers[method] = function(err, result, context, config)
+          if err ~= nil and err.code == -32802 then
+            return
+          end
+          return default_diagnostic_handler(err, result, context, config)
+        end
+      end
+
       -- Lua Language Server Configuration
       lspconfig.lua_ls.setup({
         capabilities = capabilities, -- Reuse existing capabilities
@@ -187,8 +200,8 @@ return {
           local opts = { noremap = true, silent = true, buffer = bufnr }
 
           -- Key mappings
-          vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts) -- Go to definition
-          vim.keymap.set("n", "K", vim.lsp.buf.hover, opts) -- Show hover info
+          vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)     -- Go to definition
+          vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)           -- Show hover info
           vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts) -- Rename symbol
           vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Go to next diagnostic" })
           vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Go to previous diagnostic" })
@@ -196,7 +209,7 @@ return {
         settings = {
           Lua = {
             runtime = {
-              version = "LuaJIT", -- Lua runtime version used by Neovim
+              version = "LuaJIT",                  -- Lua runtime version used by Neovim
               path = vim.split(package.path, ";"), -- Lua package path
             },
             diagnostics = {
@@ -204,7 +217,7 @@ return {
             },
             workspace = {
               library = vim.api.nvim_get_runtime_file("", true), -- Load Neovim runtime files
-              checkThirdParty = false, -- Prevent annoying pop-ups for third-party tools
+              checkThirdParty = false,                           -- Prevent annoying pop-ups for third-party tools
             },
             telemetry = {
               enable = false, -- Disable telemetry for better performance
@@ -219,16 +232,16 @@ return {
           local opts = { noremap = true, silent = true, buffer = bufnr }
 
           -- Key mappings
-          vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts) -- Go to definition
-          vim.keymap.set("n", "K", vim.lsp.buf.hover, opts) -- Show hover info
+          vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)     -- Go to definition
+          vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)           -- Show hover info
           vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts) -- Rename symbol
           vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Go to next diagnostic" })
           vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Go to previous diagnostic" })
         end,
         settings = {
           gopls = {
-            gofumpt = true, -- Enforce `gofumpt` formatting
-            staticcheck = true, -- Enable static analysis (linting)
+            gofumpt = true,        -- Enforce `gofumpt` formatting
+            staticcheck = true,    -- Enable static analysis (linting)
             analyses = {
               unusedparams = true, -- Report unused function parameters
             },
@@ -238,5 +251,3 @@ return {
     end,
   },
 }
-
-
