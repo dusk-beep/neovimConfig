@@ -40,20 +40,21 @@ vim.keymap.set("n", "<leader>p", [["+p]])
 
 vim.keymap.set("n", "<leader>F", vim.lsp.buf.format)
 
-vim.api.nvim_create_autocmd("BufWritePre", {
-  pattern = "*.java", -- Apply to Java files
-  callback = function()
-    -- Save the file first to avoid overwriting changes
-    vim.cmd(":w")
-
-    -- Run astyle to format the file silently
-    vim.cmd(":silent !astyle --indent=tab=2 --style=java --pad-oper --break-blocks %")
-
-    -- Reload the file to reflect changes made by astyle
-    vim.cmd(":edit!") -- This reloads the file after it has been formatted by astyle
-  end,
-})
-
+--
+--vim.api.nvim_create_autocmd("BufWritePre", {
+--  pattern = "*.java", -- Apply to Java files
+--  callback = function()
+--    -- Save the file first to avoid overwriting changes
+--    vim.cmd(":w")
+--
+--    -- Run astyle to format the file silently
+--    vim.cmd(":silent !astyle --indent=tab=2 --style=java --pad-oper --break-blocks %")
+--
+--    -- Reload the file to reflect changes made by astyle
+--    vim.cmd(":edit!") -- This reloads the file after it has been formatted by astyle
+--  end,
+--})
+--
 --vim.api.nvim_create_autocmd("bufwritepre", {
 --  pattern = "*.c",   -- apply to java files
 --  callback = function()
