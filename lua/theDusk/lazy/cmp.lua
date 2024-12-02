@@ -44,9 +44,6 @@ return {
           end
         },
         mapping = {
-
-
-
           ['<CR>'] = cmp.mapping(function(fallback)
             if cmp.visible() then
               if luasnip.expandable() then
@@ -80,7 +77,6 @@ return {
               fallback()
             end
           end, { "i", "s" }),
-
 
 
           ['<C-g>'] = function()
@@ -249,6 +245,31 @@ return {
           },
         },
       })
+
+
+-- Configure Pyright
+      lspconfig.pyright.setup({
+        capabilities = capabilities,
+        on_attach = function(client, bufnr)
+          -- Keybindings for LSP (optional)
+          local bufopts = { noremap = true, silent = true, buffer = bufnr }
+          vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
+          vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
+          vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, bufopts)
+          vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Go to next diagnostic" })
+          vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Go to previous diagnostic" })
+        end,
+        settings = {
+          python = {
+            analysis = {
+              typeCheckingMode = "basic", -- Options: off, basic, strict
+              autoSearchPaths = true,
+              useLibraryCodeForTypes = true,
+            },
+          },
+        },
+      })
     end,
   },
 }
+

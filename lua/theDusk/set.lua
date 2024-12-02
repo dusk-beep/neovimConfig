@@ -38,6 +38,8 @@ vim.opt.undofile = true  -- Enable persistent undo
 -- Optional: Maximum number of undo levels
 vim.opt.undolevels = 250
 
+vim.diagnostic.config({ virtual_text = false })
+
 vim.api.nvim_create_autocmd("VimLeave", {
   callback = function()
     require("harpoon.mark").clear_all()
@@ -46,5 +48,4 @@ vim.api.nvim_create_autocmd("VimLeave", {
 
 -- Set up a keybinding to show diagnostics in a floating window
 vim.api.nvim_set_keymap('n', '<leader>e', ':lua vim.diagnostic.open_float(nil, { focus = false, border = "rounded", source = "always", severity = vim.diagnostic.severity.ERROR })<CR>', { noremap = true, silent = true })
-
 
