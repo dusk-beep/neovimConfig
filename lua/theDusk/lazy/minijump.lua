@@ -1,9 +1,18 @@
 return {
-  'echasnovski/mini.jump', version = false,
-  
+  'echasnovski/mini.jump',
+  version = false,
+
   config = function()
+    -- Ensure the catppuccin colorscheme is active
+
+    -- Manually set foreground and background colors
+    vim.api.nvim_set_hl(0, 'MiniJump', {
+      fg = "#52dbbd",  -- Example foreground color (light font color from catppuccin)
+      bg = "#303a50",  -- `mocha` background color from catppuccin
+    })
+
+    -- Setup mini.jump with your desired mappings
     require('mini.jump').setup({
-      -- Your configuration here
       mappings = {
         forward = 'f',
         backward = 'F',
@@ -13,8 +22,9 @@ return {
       },
       delay = {
         highlight = 250,
-        idle_stop = 1000,
+        idle_stop = 3000,
       },
+      hl = 'MiniJump',  -- Apply the custom highlight group
     })
   end
 }
