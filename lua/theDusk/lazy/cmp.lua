@@ -103,7 +103,7 @@ return {
           --  { name = "buffer", max_item_count = 5 },
           { name = "nvim_lsp",               max_item_count = 10 },
         --  { name = "luasnip",                max_item_count = 3 },
-          { name = 'nvim_lsp_signature_help' },
+          --{ name = 'nvim_lsp_signature_help' },
         },
         completion = {
           completeopt = 'menuone,noinsert,noselect', -- Disable auto-completion window
