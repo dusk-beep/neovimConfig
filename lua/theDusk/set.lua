@@ -38,10 +38,23 @@ vim.opt.undofile = true  -- Enable persistent undo
 -- Optional: Maximum number of undo levels
 vim.opt.undolevels = 250
 
-vim.diagnostic.config({ virtual_text = false })
+--vim.diagnostic.config({ virtual_text = false })
 
 
 -- Set up a keybinding to show diagnostics in a floating window
 vim.api.nvim_set_keymap('n', '<leader>e', ':lua vim.diagnostic.open_float(nil, { focus = false, border = "rounded", source = "always", severity = vim.diagnostic.severity.ERROR })<CR>', { noremap = true, silent = true })
 
 --vim.api.nvim_set_keymap('n', '<leader>ca', ':lua vim.lsp.buf.code_action()<CR>', { noremap = true, silent = true })
+--
+vim.api.nvim_create_autocmd("LspAttach", {
+  callback = function(args)
+    local bufnr = args.buf
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if vim.tbl_contains({ 'null-ls' }, client.name) then  -- blacklist lsp
+      return
+    end
+    require("lsp_signature").on_attach({
+      -- ... setup options here ...
+    }, bufnr)
+  end,
+})
