@@ -21,11 +21,6 @@ return {
       --
 
       cmp.setup({
-        snippet = {
-          expand = function(args)
-            require("luasnip").lsp_expand(args.body)
-          end,
-        },
         enabled = function()
           -- disable completion in comments
           local context = require 'cmp.config.context'
@@ -107,7 +102,7 @@ return {
         sources = {
           --  { name = "buffer", max_item_count = 5 },
           { name = "nvim_lsp",               max_item_count = 10 },
-          { name = "luasnip",                max_item_count = 3 },
+        --  { name = "luasnip",                max_item_count = 3 },
           { name = 'nvim_lsp_signature_help' },
         },
         completion = {
@@ -272,4 +267,3 @@ return {
     end,
   },
 }
-

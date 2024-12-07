@@ -1,13 +1,13 @@
 return {
   "nvim-treesitter/nvim-treesitter",
   build = ":TSUpdate",
-  dependencies = { "nvim-treesitter/nvim-treesitter-textobjects" },
+  dependencies = { "nvim-treesitter/nvim-treesitter-textobjects","windwp/nvim-ts-autotag" },
   config = function()
     require("nvim-treesitter.configs").setup({
       -- A list of parser names, or "all"
       ensure_installed = {
         "vimdoc", "javascript", "typescript", "c", "lua", "rust",
-        "jsdoc", "bash", "java", "cpp", "python","css","html","go","markdown"
+        "jsdoc", "bash", "java", "cpp", "python", "css", "html", "go", "markdown","cmake","comment","csv","gitignore","git_rebase","gitattributes","glsl","http","make","sql"
       },
 
       -- Install parsers synchronously (only applied to `ensure_installed`)
@@ -35,7 +35,7 @@ return {
         },
       },
 
-      -- Textobjects configuration
+      -- -- Textobjects configuration
       textobjects = {
         select = {
           enable = true,
@@ -74,10 +74,14 @@ return {
     -- Modify LSP hover window with Treesitter integration
     vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
       -- Use Treesitter to highlight markdown in LSP docs
-      border = "rounded",  -- Add a border around the hover window
-      winhighlight = "Normal:Normal",  -- Optional for customizing window highlights
+      border = "rounded",             -- Add a border around the hover window
+      winhighlight = "Normal:Normal", -- Optional for customizing window highlights
       -- You can adjust the handler to include Treesitter-based rendering
       -- Ensure Treesitter highlighting is enabled for markdown files
+    })
+    require('nvim-ts-autotag').setup({
+      enable = true,
+      filetypes = { "html", "tsx" },
     })
   end
 }
