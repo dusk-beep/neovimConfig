@@ -5,7 +5,7 @@ return {
   config = function()
     -- Default configuration
     require("tiny-inline-diagnostic").setup({
-      preset = "classic", -- Can be: "modern", "classic", "minimal", "ghost", "simple", "nonerdfont", "amongus"
+      preset = "ghost", -- Can be: "modern", "classic", "minimal", "ghost", "simple", "nonerdfont", "amongus"
       hi = {
         error = "DiagnosticError",
         warn = "DiagnosticWarn",

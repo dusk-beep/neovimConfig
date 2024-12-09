@@ -20,7 +20,15 @@ return {
         lualine_a = { 'mode' },
         lualine_b = {'filename'},
         lualine_c = {},
-        lualine_x = {}, -- Remove encoding, fileformat, etc.
+        lualine_x = {
+          {
+            function()
+              local reg = vim.fn.reg_recording()
+              if reg == "" then return "" end -- not recording
+              return "recording to " .. reg
+            end,
+          } 
+        }, -- Remove encoding, fileformat, etc.
         lualine_y = {}, -- Clear unused sections
         lualine_z = {'diagnostics','branch'}, -- Clear unused sections
       },
