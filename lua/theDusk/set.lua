@@ -44,4 +44,4 @@ vim.diagnostic.config({ virtual_text = false })
 -- Set up a keybinding to show diagnostics in a floating window
 vim.api.nvim_set_keymap('n', '<leader>e', ':lua vim.diagnostic.open_float(nil, { focus = false, border = "rounded", source = "always", severity = vim.diagnostic.severity.ERROR })<CR>', { noremap = true, silent = true })
 
---vim.api.nvim_set_keymap('n', '<leader>ca', ':lua vim.lsp.buf.code_action()<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>ca', ':lua vim.lsp.buf.code_action()<CR>', { noremap = true, silent = true })

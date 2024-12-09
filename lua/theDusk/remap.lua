@@ -26,8 +26,8 @@ vim.api.nvim_set_keymap('n', '<leader>np', "f,;t,;", { noremap = true, silent = 
 
 vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]], { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>b', ':bprevious<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>n', ':bnext<CR>', { noremap = true, silent = true })
-
+vim.api.nvim_set_keymap('n', '<leader>w', ':bnext<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "<leader>Q", ":bd<CR>", { noremap = true, silent = true })
 --move visual selected up and down
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
