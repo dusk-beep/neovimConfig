@@ -13,18 +13,10 @@ return {
 			local cmp = require("cmp")
 			local luasnip = require("luasnip")
 			local cmp_nvim_lsp = require("cmp_nvim_lsp")
-
-			-- Make sure your snippets are loaded correctly
 			require("luasnip.loaders.from_vscode").lazy_load()
-
-			-- Complete cmp setup with Tab and Shift-Tab for cycling through completions
-			--
-
 			cmp.setup({
 				enabled = function()
-					-- disable completion in comments
 					local context = require("cmp.config.context")
-					-- keep command mode completion enabled when cursor is in a comment
 					if vim.api.nvim_get_mode().mode == "c" then
 						return true
 					else
@@ -83,7 +75,6 @@ return {
 					["<C-k>"] = cmp.mapping.scroll_docs(-4),
 					["<C-j>"] = cmp.mapping.scroll_docs(4),
 
-					-- You can keep this for snippet expansion (if you are using luasnip)
 					["@"] = cmp.mapping(function(fallback)
 						if luasnip.expand_or_jumpable() then
 							luasnip.expand_or_jump() -- Expand or jump to the next snippet placeholder
@@ -91,9 +82,6 @@ return {
 							fallback() -- If no snippet, fall back to default action (e.g., indent)
 						end
 					end, { "i", "s" }),
-
-					-- Optional: Confirm completion with Enter
-					--['<CR>'] = cmp.mapping.confirm({ select = true }),
 				},
 
 				-- Sources for completion
@@ -118,8 +106,8 @@ return {
 			})
 			-- Configure LSP servers
 			local lspconfig = require("lspconfig")
-			--local capabilities = cmp_nvim_lsp.default_capabilities()
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
+			capabilities.textDocument.completion.completionItem.snippetSupport = true
 
 			-- Example: Configure clangd
 			-- lspconfig.clangd.setup({
@@ -134,33 +122,41 @@ return {
 			--   end,
 			-- })
 
-			-- Configure tsserver (JavaScript/TypeScript LSP)
+			local attach = function(client, bufnr)
+				local opts = { noremap = true, silent = true, buffer = bufnr }
+				vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts) -- Go to definition
+				vim.keymap.set("n", "K", vim.lsp.buf.hover, opts) -- Show hover info
+				vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts) -- Rename symbol
+				vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts) -- codeaction
+				vim.keymap.set("n", "gr", vim.lsp.buf.references, opts) -- Show all references
+				vim.keymap.set("n", "<leader>sh", vim.lsp.buf.signature_help, opts) --signature
+				vim.keymap.set("n", "gD", vim.lsp.buf.type_definition, opts) -- defination type
+				vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts) -- go to implementatuon
+				vim.keymap.set("n", "<leader>ws", vim.lsp.buf.workspace_symbol, opts) -- Search workspace symbols
+			end
+
 			lspconfig.ts_ls.setup({
 				capabilities = capabilities,
-				on_attach = function(client, bufnr)
-					local opts = { noremap = true, silent = true, buffer = bufnr }
-					vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts) -- Go to definition
-					vim.keymap.set("n", "K", vim.lsp.buf.hover, opts) -- Show hover info
-					vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts) -- Rename symbol
-					vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Go to next diagnostic" })
-					vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Go to previous diagnostic" })
-				end,
+				on_attach = attach,
 			})
 
-			require("lspconfig").rust_analyzer.setup({
+			lspconfig.html.setup({
+				filetypes = { "html", "htmldjango" },
 				capabilities = capabilities,
-				on_attach = function(client, bufnr)
-					-- Key mappings for LSP actions
-					local opts = { noremap = true, silent = true, buffer = bufnr }
-					vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-					vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
-					vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
-					vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
-					vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
-				end,
+
+				on_attach = attach,
+			})
+
+			lspconfig.cssls.setup({
+				capabilities = capabilities,
+				on_attach = attach,
+			})
+
+			lspconfig.rust_analyzer.setup({
+				capabilities = capabilities,
+				on_attach = attach,
 				settings = {
 					["rust-analyzer"] = {
-						-- Enable `clippy` checks on save
 						checkOnSave = {
 							command = "clippy",
 						},
@@ -181,16 +177,7 @@ return {
 			-- Lua Language Server Configuration
 			lspconfig.lua_ls.setup({
 				capabilities = capabilities, -- Reuse existing capabilities
-				on_attach = function(client, bufnr)
-					local opts = { noremap = true, silent = true, buffer = bufnr }
-
-					-- Key mappings
-					vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts) -- Go to definition
-					vim.keymap.set("n", "K", vim.lsp.buf.hover, opts) -- Show hover info
-					vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts) -- Rename symbol
-					vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Go to next diagnostic" })
-					vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Go to previous diagnostic" })
-				end,
+				on_attach = attach,
 				settings = {
 					Lua = {
 						runtime = {
@@ -213,16 +200,7 @@ return {
 
 			lspconfig.gopls.setup({
 				capabilities = capabilities, -- Reuse existing capabilities (like autocompletion support)
-				on_attach = function(client, bufnr)
-					local opts = { noremap = true, silent = true, buffer = bufnr }
-
-					-- Key mappings
-					vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts) -- Go to definition
-					vim.keymap.set("n", "K", vim.lsp.buf.hover, opts) -- Show hover info
-					vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts) -- Rename symbol
-					vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Go to next diagnostic" })
-					vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Go to previous diagnostic" })
-				end,
+				on_attach = attach,
 				settings = {
 					gopls = {
 						gofumpt = true, -- Enforce `gofumpt` formatting
@@ -237,15 +215,7 @@ return {
 			-- Configure Pyright
 			lspconfig.pyright.setup({
 				capabilities = capabilities,
-				on_attach = function(client, bufnr)
-					-- Keybindings for LSP (optional)
-					local bufopts = { noremap = true, silent = true, buffer = bufnr }
-					vim.keymap.set("n", "gd", vim.lsp.buf.definition, bufopts)
-					vim.keymap.set("n", "K", vim.lsp.buf.hover, bufopts)
-					vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, bufopts)
-					vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Go to next diagnostic" })
-					vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Go to previous diagnostic" })
-				end,
+				on_attach = attach,
 				settings = {
 					python = {
 						analysis = {

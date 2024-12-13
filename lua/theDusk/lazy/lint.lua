@@ -9,6 +9,7 @@ return {
 			c = { "clangtidy" },
 			css = { "stylelint" },
 			json = { "jsonlint" },
+			sh = { "shellcheck" },
 		}
 
 		-- Automatically lint on save

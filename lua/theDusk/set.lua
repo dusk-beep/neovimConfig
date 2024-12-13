@@ -71,5 +71,17 @@ vim.fn.sign_define(
 	{ text = "", hl = "DiagnosticSignHint", texthl = "DiagnosticSignHint", culhl = "DiagnosticSignHintLine" }
 )
 
+vim.api.nvim_set_hl(0, "LightBulbNumber", { fg = "Yellow" })
+
 vim.o.grepprg = [[rg --glob "!.git" --no-heading --vimgrep --follow $*]]
 vim.opt.grepformat = vim.opt.grepformat ^ { "%f:%l:%c:%m" }
+
+-- Set vim.diagnostic to true when file type
+vim.api.nvim_create_autocmd("FileType", {
+	callback = function()
+		local clients = vim.lsp.get_clients({ bufnr = 0 })
+		if vim.tbl_isempty(clients) then
+			vim.diagnostic.config({ virtual_text = true })
+		end
+	end,
+})
