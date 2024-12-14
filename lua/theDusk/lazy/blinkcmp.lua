@@ -21,8 +21,8 @@ return {
 		-- your own keymap.
 		keymap = {
 			preset = "enter",
-			["~"] = { "select_prev", "fallback" },
-			["<Tab>"] = { "select_next", "fallback" },
+			["~"] = { "snippet_backward", "fallback" },
+			["<Tab>"] = { "snippet_forward", "fallback" },
 			["<A-1>"] = {
 				function(cmp)
 					cmp.accept({ index = 1 })
@@ -115,6 +115,38 @@ return {
 			-- Set to 'mono' for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
 			-- Adjusts spacing to ensure icons are aligned
 			nerd_font_variant = "mono",
+			kind_icons = {
+				Text = "󰉿",
+				Method = "󰊕",
+				Function = "󰊕",
+				Constructor = "󰒓",
+
+				Field = "󰜢",
+				Variable = "󰆦",
+				Property = "󰖷",
+
+				Class = "󱡠",
+				Interface = "󱡠",
+				Struct = "󱡠",
+				Module = "󰅩",
+
+				Unit = "󰪚",
+				Value = "󰦨",
+				Enum = "󰦨",
+				EnumMember = "󰦨",
+
+				Keyword = "󰻾",
+				Constant = "󰏿",
+
+				Snippet = "󱄽",
+				Color = "󰏘",
+				File = "󰈔",
+				Reference = "󰬲",
+				Folder = "󰉋",
+				Event = "󱐋",
+				Operator = "󰪚",
+				TypeParameter = "󰬛",
+			},
 		},
 		-- default list of enabled providers defined so that you can extend it
 		-- elsewhere in your config, without redefining it, via `opts_extend`
