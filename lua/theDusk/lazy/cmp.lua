@@ -108,20 +108,6 @@ return {
 			local lspconfig = require("lspconfig")
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
 			capabilities.textDocument.completion.completionItem.snippetSupport = true
-
-			-- Example: Configure clangd
-			-- lspconfig.clangd.setup({
-			--   capabilities = capabilities,
-			--   on_attach = function(client, bufnr)
-			--     local opts = { noremap = true, silent = true, buffer = bufnr }
-			--     vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-			--     vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
-			--     vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
-			--     vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Go to next diagnostic" })
-			--     vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Go to previous diagnostic" })
-			--   end,
-			-- })
-
 			local attach = function(client, bufnr)
 				local opts = { noremap = true, silent = true, buffer = bufnr }
 				vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts) -- Go to definition
@@ -134,6 +120,11 @@ return {
 				vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts) -- go to implementatuon
 				vim.keymap.set("n", "<leader>ws", vim.lsp.buf.workspace_symbol, opts) -- Search workspace symbols
 			end
+
+			lspconfig.clangd.setup({
+				capabilities = capabilities,
+				on_attach = attach,
+			})
 
 			lspconfig.ts_ls.setup({
 				capabilities = capabilities,
