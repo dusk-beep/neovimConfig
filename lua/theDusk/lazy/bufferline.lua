@@ -6,6 +6,8 @@ return {
 
 		config = function()
 			require("bufferline").setup({
+				highlights = require("catppuccin.groups.integrations.bufferline").get(),
+
 				options = {
 					numbers = "ordinal", -- Display buffer numbers as ordinals (1, 2, 3, ...)
 					buffer_close_icon = "", -- Customize the close icon if needed

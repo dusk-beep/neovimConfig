@@ -95,13 +95,13 @@ return {
 			},
 		})
 		-- Modify LSP hover window with Treesitter integration
-		vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
-			-- Use Treesitter to highlight markdown in LSP docs
-			border = "rounded", -- Add a border around the hover window
-			winhighlight = "Normal:Normal", -- Optional for customizing window highlights
-			-- You can adjust the handler to include Treesitter-based rendering
-			-- Ensure Treesitter highlighting is enabled for markdown files
-		})
+		-- vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
+		-- 	-- Use Treesitter to highlight markdown in LSP docs
+		-- 	border = "rounded", -- Add a border around the hover window
+		-- 	winhighlight = "Normal:Normal", -- Optional for customizing window highlights
+		-- 	-- You can adjust the handler to include Treesitter-based rendering
+		-- 	-- Ensure Treesitter highlighting is enabled for markdown files
+		-- })
 		require("nvim-ts-autotag").setup({
 			enable = true,
 			filetypes = { "html", "tsx" },
