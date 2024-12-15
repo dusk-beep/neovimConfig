@@ -9,9 +9,36 @@ return {
 		statuscolumn = {},
 		zen = {},
 		scope = {},
+		indent = {
+			only_scope = true,
+			only_current = true,
+			hl = {
+				"SnacksIndent1",
+				"SnacksIndent2",
+				"SnacksIndent3",
+				"SnacksIndent4",
+				"SnacksIndent5",
+				"SnacksIndent6",
+				"SnacksIndent7",
+				"SnacksIndent8",
+			},
+			scope = {
+				enabled = false,
+			},
+			blank = {
+				char = ".",
+			},
+		},
 	},
 	keys = {
 		-- Delete Buffer
+		{
+			"<leader>H",
+			function()
+				require("snacks").dashboard()
+			end,
+			desc = "open dashboard",
+		},
 		{
 			"<leader>bd",
 			function()

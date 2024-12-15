@@ -12,6 +12,7 @@ return {
 	-- build = 'nix run .#build-plugin',
 	event = "InsertEnter",
 	---@module 'blink.cmp'
+	---@diagnostic disable-next-line: undefined-doc-name
 	---@type blink.cmp.Config
 	opts = {
 		-- 'default' for mappings similar to built-in completion
@@ -21,8 +22,10 @@ return {
 		-- your own keymap.
 		keymap = {
 			preset = "enter",
-			["~"] = { "snippet_backward", "fallback" },
-			["<Tab>"] = { "snippet_forward", "fallback" },
+			["<Tab>"] = { "select_next", "fallback" },
+			["~"] = { "select_prev", "fallback" },
+			["#"] = { "snippet_backward", "fallback" },
+			["@"] = { "snippet_forward", "fallback" },
 			["<A-1>"] = {
 				function(cmp)
 					cmp.accept({ index = 1 })
@@ -77,20 +80,50 @@ return {
 				},
 			},
 			menu = {
+				list = {
+					selection = "manual",
+				},
 				treesitter = true,
 				border = "rounded",
+				winhighlight = "Normal:navyblue,FloatBorder:BlinkCmpMenuBorder,CursorLine:BlinkCmpMenuSelection,Search:None",
 				draw = {
 					treesitter = { "lsp" },
 					columns = { { "item_idx" }, { "kind_icon" }, { "label", "label_description", gap = 1 } },
 					components = {
+						kind = {
+							highlight = "#181825",
+						},
 						item_idx = {
 							text = function(ctx)
 								return tostring(ctx.idx)
 							end,
-							highlight = "BlinkCmpItemIdx", -- optional, only if you want to change its color
+							highlight = "sky", -- optional, only if you want to change its color
 						},
 						label = {
 							width = { fill = true, max = 30 },
+							highlight = function(ctx)
+								-- label and label details
+								local highlights = {
+									{
+										0,
+										#ctx.label,
+										group = ctx.deprecated and "BlinkCmpLabelDeprecated" or "saphire", --color_text
+									},
+								}
+								if ctx.label_detail then
+									table.insert(
+										highlights,
+										{ #ctx.label, #ctx.label + #ctx.label_detail, group = "BlinkCmpLabelDetail" }
+									)
+								end
+
+								-- characters matched on the label by the fuzzy matcher
+								for _, idx in ipairs(ctx.label_matched_indices) do
+									table.insert(highlights, { idx, idx + 1, group = "BlinkCmpLabelMatch" })
+								end
+
+								return highlights
+							end,
 						},
 					},
 				},

@@ -5,8 +5,27 @@ return {
 	config = function()
 		require("catppuccin").setup({
 			flavour = "mocha", -- Choose from "latte", "frappe", "macchiato", "mocha"
+			dim_inactive = {
+				enabled = false,
+				-- Dim inactive splits/windows/buffers.
+				-- NOT recommended if you use old palette (a.k.a., mocha).
+				shade = "dark",
+				percentage = 0.15,
+			},
+			color_overrides = {
+				mocha = {
+					base = "#181825",
+				},
+			},
+			term_colors = true,
 			integrations = {
 				blink_cmp = true,
+				telescope = {
+					enabled = true,
+				},
+				mini = {
+					enabled = true,
+				},
 				snacks = true,
 				lsp_trouble = true,
 				which_key = true,

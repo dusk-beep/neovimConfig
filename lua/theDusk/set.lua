@@ -37,7 +37,7 @@ vim.opt.undofile = true -- Enable persistent undo
 -- Optional: Maximum number of undo levels
 vim.opt.undolevels = 250
 
--- vim.diagnostic.config({ virtual_text = false })
+vim.diagnostic.config({ virtual_text = true })
 
 -- Set up a keybinding to show diagnostics in a floating window
 vim.api.nvim_set_keymap(
@@ -77,11 +77,25 @@ vim.o.grepprg = [[rg --glob "!.git" --no-heading --vimgrep --follow $*]]
 vim.opt.grepformat = vim.opt.grepformat ^ { "%f:%l:%c:%m" }
 
 -- Set vim.diagnostic to true when file type
-vim.api.nvim_create_autocmd("FileType", {
+-- vim.api.nvim_create_autocmd("FileType", {
+-- 	callback = function()
+-- 		local clients = vim.lsp.get_clients({ bufnr = 0 })
+-- 		if vim.tbl_isempty(clients) then
+-- 			vim.diagnostic.config({ virtual_text = true })
+-- 		end
+-- 	end,
+-- })
+
+vim.api.nvim_create_autocmd("VimLeavePre", {
+	pattern = "*",
 	callback = function()
-		local clients = vim.lsp.get_clients({ bufnr = 0 })
-		if vim.tbl_isempty(clients) then
-			vim.diagnostic.config({ virtual_text = true })
-		end
+		-- Set a custom mark before exiting
+		vim.cmd("normal! ms") -- 'Z' is an example; change to any valid mark.
 	end,
 })
+
+-- Define a new highlight group with color #152238
+vim.api.nvim_command("highlight navyblue guifg=#24273a")
+vim.api.nvim_command("highlight sky guifg=#89dceb")
+vim.api.nvim_command("highlight saphire guifg=#74c7ec")
+vim.api.nvim_command("highlight selectItem cterm=bold gui=bold guibg=#74c7ec guifg=#181926")
