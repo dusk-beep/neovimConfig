@@ -107,9 +107,17 @@ return {
 		end, { noremap = true, silent = true, desc = "find documents" })
 
 		vim.keymap.set("n", "<leader>tf", function()
-			require("telescope.builtin").lsp_document_symbols({
-				symbols = { "class", "function" }, -- Filter for class and function symbols
+			local dropdown = require("telescope.themes").get_dropdown({
+				winblend = 10, -- Transparency
+				previewer = true, -- Enable preview
+				layout_config = {
+					width = 0.8, -- Wider dropdown for preview
+					height = 0.5, -- Taller dropdown for preview
+				},
 			})
+			require("telescope.builtin").lsp_document_symbols(vim.tbl_extend("force", dropdown, {
+				symbols = { "class", "function" }, -- Filter for class and function symbols
+			}))
 		end, { desc = "Search for classes and functions in the document" })
 
 		vim.keymap.set("n", "<leader>ti", function()
@@ -120,7 +128,17 @@ return {
 
 		vim.keymap.set("n", "<leader>tc", builtin.command_history, { desc = "search commands" })
 
-		vim.keymap.set("n", "<leader>tm", builtin.marks, { desc = "search marks" })
+		vim.keymap.set("n", "<leader>tm", function()
+			local dropdown = require("telescope.themes").get_dropdown({
+				winblend = 10, -- Transparency
+				previewer = true, -- Enable preview
+				layout_config = {
+					width = 0.8, -- Wider dropdown for preview
+					height = 0.5, -- Taller dropdown for preview
+				},
+			})
+			require("telescope.builtin").marks(dropdown)
+		end, { desc = "search marks" })
 
 		vim.keymap.set("n", "<leader>tn", builtin.treesitter, { desc = "search treesitter" })
 
