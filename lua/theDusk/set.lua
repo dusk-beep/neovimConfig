@@ -44,10 +44,8 @@ vim.api.nvim_set_keymap(
 	"n",
 	"<leader>e",
 	':lua vim.diagnostic.open_float(nil, { focus = false, border = "rounded", source = "always", severity = vim.diagnostic.severity.ERROR })<CR>',
-	{ noremap = true, silent = true }
+	{ noremap = true, silent = true, desc = "pretty diagnostics" }
 )
-
-vim.api.nvim_set_keymap("n", "<leader>ca", ":lua vim.lsp.buf.code_action()<CR>", { noremap = true, silent = true })
 
 vim.o.foldmethod = "expr"
 vim.o.foldexpr = "nvim_treesitter#foldexpr()"
@@ -71,8 +69,6 @@ vim.fn.sign_define(
 	{ text = "", hl = "DiagnosticSignHint", texthl = "DiagnosticSignHint", culhl = "DiagnosticSignHintLine" }
 )
 
-vim.api.nvim_set_hl(0, "LightBulbNumber", { fg = "Yellow" })
-
 vim.o.grepprg = [[rg --glob "!.git" --no-heading --vimgrep --follow $*]]
 vim.opt.grepformat = vim.opt.grepformat ^ { "%f:%l:%c:%m" }
 
@@ -85,14 +81,6 @@ vim.opt.grepformat = vim.opt.grepformat ^ { "%f:%l:%c:%m" }
 -- 		end
 -- 	end,
 -- })
-
-vim.api.nvim_create_autocmd("VimLeavePre", {
-	pattern = "*",
-	callback = function()
-		-- Set a custom mark before exiting
-		vim.cmd("normal! ms") -- 'Z' is an example; change to any valid mark.
-	end,
-})
 
 -- Define a new highlight group with color #152238
 vim.api.nvim_command("highlight navyblue guifg=#24273a")

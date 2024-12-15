@@ -9,6 +9,7 @@ return {
 		statuscolumn = {},
 		zen = {},
 		scope = {},
+		toggle = {},
 		indent = {
 			only_scope = true,
 			only_current = true,
