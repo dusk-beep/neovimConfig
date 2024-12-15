@@ -1,5 +1,6 @@
 return {
 	"mfussenegger/nvim-lint",
+	event = { "BufWritePre" },
 	config = function()
 		require("lint").linters_by_ft = {
 			javascript = { "eslint" },
