@@ -4,7 +4,11 @@ return {
 	dependencies = {
 		"nvim-lua/plenary.nvim",
 		"nvim-tree/nvim-web-devicons",
-		"jvgrootveld/telescope-zoxide", -- Add the zoxide plugin
+		"jvgrootveld/telescope-zoxide",
+		{
+			"nvim-telescope/telescope-fzf-native.nvim",
+			build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release",
+		},
 	},
 
 	config = function()
@@ -42,6 +46,13 @@ return {
 				},
 			},
 			extensions = {
+				fzf = {
+					fuzzy = true, -- false will only do exact matching
+					override_generic_sorter = true, -- override the generic sorter
+					override_file_sorter = true, -- override the file sorter
+					case_mode = "smart_case", -- or "ignore_case" or "respect_case"
+					-- the default case_mode is "smart_case"
+				},
 				zoxide = {
 					prompt_title = "[ Walking on the shoulders of TJ ]",
 					mappings = {
@@ -66,6 +77,7 @@ return {
 
 		-- Load the zoxide extension
 		t.load_extension("zoxide")
+		t.load_extension("fzf")
 
 		-- Key mappings for Telescope
 		vim.keymap.set("n", "<leader>ff", builtin.find_files, { noremap = true, silent = true, desc = "find_files" })
