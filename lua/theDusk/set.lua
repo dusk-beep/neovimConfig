@@ -81,6 +81,12 @@ vim.opt.grepformat = vim.opt.grepformat ^ { "%f:%l:%c:%m" }
 -- 		end
 -- 	end,
 -- })
+-- Delete all marks on startup
+vim.api.nvim_create_autocmd("VimEnter", {
+	callback = function()
+		vim.cmd("delmarks 0-9") -- Delete all marks from a-z and A-Z
+	end,
+})
 
 -- Define a new highlight group with color #152238
 vim.api.nvim_command("highlight navyblue guifg=#24273a")

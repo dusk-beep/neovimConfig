@@ -19,16 +19,7 @@ return {
 		t.setup({
 			pickers = {
 				find_files = {
-					find_command = {
-						"rg",
-						"--files",
-						"--glob",
-						"!.git",
-						"--glob",
-						"!node_modules/*",
-						"--sortr",
-						"modified",
-					},
+					find_command = { "rg", "--no-config", "--files", "--sortr=modified", "--glob=!node_modules/**" },
 				},
 			},
 			defaults = {
@@ -108,7 +99,7 @@ return {
 			builtin.grep_string({ search = vim.fn.input("Grep > ") })
 		end)
 
-		vim.keymap.set("n", "<leader>vh", builtin.help_tags, {})
+		vim.keymap.set("n", "<leader>th", builtin.help_tags, { desc = "helper tags" })
 
 		vim.keymap.set("n", "<leader>td", function()
 			builtin.diagnostics({ bufnr = 0 })
@@ -137,6 +128,8 @@ return {
 		end, { noremap = true, silent = true, desc = "find lsp_implementations under cursor" })
 
 		vim.keymap.set("n", "<leader>tt", builtin.builtin, { desc = "search builtins" })
+
+		vim.keymap.set("n", "<leader>to", builtin.oldfiles, { desc = "search old_files" })
 
 		vim.keymap.set("n", "<leader>tc", builtin.command_history, { desc = "search commands" })
 
