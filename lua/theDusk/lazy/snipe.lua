@@ -9,10 +9,12 @@ return {
 			desc = "Open Snipe buffer menu",
 		},
 	},
-
 	opts = {
 		hints = {
 			dictionary = "1234567890",
+		},
+		navigate = {
+			cancel_snipe = "q",
 		},
 	},
 }

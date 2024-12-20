@@ -24,6 +24,7 @@ return {
 			json = { "prettier" },
 			css = { "prettier" },
 			c = { "clang-format" },
+			javascriptreact = { "prettier" },
 		},
 		default_format_opts = {
 			lsp_format = "fallback",

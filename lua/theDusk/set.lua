@@ -37,7 +37,7 @@ vim.opt.undofile = true -- Enable persistent undo
 -- Optional: Maximum number of undo levels
 vim.opt.undolevels = 250
 
-vim.diagnostic.config({ virtual_text = false })
+-- vim.diagnostic.config({ virtual_text = false })
 
 -- Set up a keybinding to show diagnostics in a floating window
 vim.api.nvim_set_keymap(
@@ -78,6 +78,8 @@ vim.api.nvim_create_autocmd("FileType", {
 		local clients = vim.lsp.get_clients({ bufnr = 0 })
 		if vim.tbl_isempty(clients) then
 			vim.diagnostic.config({ virtual_text = true })
+		else
+			vim.diagnostic.config({ virtual_text = false })
 		end
 	end,
 })

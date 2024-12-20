@@ -12,6 +12,7 @@ return {
 				gopls = {},
 				pyright = {},
 				rust_analyzer = {},
+				jdtls = {},
 			},
 		},
 		config = function(_, opts)
