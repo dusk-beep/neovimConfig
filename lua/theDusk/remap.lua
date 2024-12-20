@@ -18,6 +18,8 @@ vim.keymap.set("n", "<c-s>", ":w<CR>", { silent = true })
 vim.keymap.set("n", "<C-k>", "<C-w>k", { silent = true })
 vim.keymap.set("n", "<C-j>", "<C-w>j", { silent = true })
 
+vim.keymap.set("n", "<leader>cc", ":!make<CR>", { silent = true, desc = "make" })
+
 vim.keymap.set("t", "<Esc>", [[<C-\><C-n>]], { noremap = true, silent = true })
 --move visual selected up and down
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")

@@ -37,7 +37,7 @@ vim.opt.undofile = true -- Enable persistent undo
 -- Optional: Maximum number of undo levels
 vim.opt.undolevels = 250
 
--- vim.diagnostic.config({ virtual_text = false })
+vim.diagnostic.config({ virtual_text = false })
 
 -- Set up a keybinding to show diagnostics in a floating window
 vim.api.nvim_set_keymap(
@@ -73,16 +73,14 @@ vim.o.grepprg = [[rg --glob "!.git" --no-heading --vimgrep --follow $*]]
 vim.opt.grepformat = vim.opt.grepformat ^ { "%f:%l:%c:%m" }
 
 -- Set vim.diagnostic to true when file type
-vim.api.nvim_create_autocmd("FileType", {
-	callback = function()
-		local clients = vim.lsp.get_clients({ bufnr = 0 })
-		if vim.tbl_isempty(clients) then
-			vim.diagnostic.config({ virtual_text = true })
-		else
-			vim.diagnostic.config({ virtual_text = false })
-		end
-	end,
-})
+-- vim.api.nvim_create_autocmd("FileType", {
+-- 	callback = function()
+-- 		local clients = vim.lsp.get_clients({ bufnr = 0 })
+-- 		if vim.tbl_isempty(clients) then
+-- 			vim.diagnostic.config({ virtual_text = true })
+-- 		end
+-- 	end,
+-- })
 -- Delete all marks on startup
 vim.api.nvim_create_autocmd("VimEnter", {
 	callback = function()
