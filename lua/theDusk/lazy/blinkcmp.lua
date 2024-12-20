@@ -29,6 +29,11 @@ return {
 			["~"] = { "select_prev", "fallback" },
 			["#"] = { "snippet_backward", "fallback" },
 			["@"] = { "snippet_forward", "fallback" },
+			["<C-t>"] = {
+				function(cmp)
+					cmp.show({ providers = { "snippets" } })
+				end,
+			},
 			["<A-1>"] = {
 				function(cmp)
 					cmp.accept({ index = 1 })
@@ -82,7 +87,7 @@ return {
 			},
 
 			list = {
-				selection = "manual",
+				selection = "preselect",
 			},
 
 			accept = {
@@ -139,7 +144,7 @@ return {
 			},
 
 			documentation = {
-				auto_show = false,
+				auto_show = true,
 				auto_show_delay_ms = 200,
 				treesitter_highlighting = true,
 				window = {
