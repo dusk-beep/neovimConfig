@@ -6,10 +6,13 @@ return {
 
 	-- use a release tag to download pre-built binaries
 	version = "v0.*",
+	build = "RUSTC_BOOTSTRAP=1 cargo build --release",
+	opts_extend = { "sources.default" },
 	-- OR build from source, requires nightly: https://rust-lang.github.io/rustup/concepts/channels.html#working-with-nightly-rust
 	-- build = 'cargo build --release',
 	-- If you use nix, you can build from source using latest nightly rust with:
 	-- build = 'nix run .#build-plugin',
+
 	event = "InsertEnter",
 	---@module 'blink.cmp'
 	---@diagnostic disable-next-line: undefined-doc-name
@@ -73,21 +76,27 @@ return {
 			},
 		},
 		completion = {
+
+			trigger = {
+				show_on_trigger_character = false,
+			},
+
+			list = {
+				selection = "manual",
+			},
+
 			accept = {
 				-- experimental auto-brackets support
 				auto_brackets = {
 					enabled = true,
 				},
 			},
+
 			menu = {
-				list = {
-					selection = "manual",
-				},
-				treesitter = true,
 				border = "rounded",
 				winhighlight = "Normal:navyblue,FloatBorder:BlinkCmpMenuBorder,CursorLine:BlinkCmpMenuSelection,Search:None",
 				draw = {
-					treesitter = { "lsp" },
+					treesitter = {},
 					columns = { { "item_idx" }, { "kind_icon" }, { "label", "label_description", gap = 1 } },
 					components = {
 						kind = {
@@ -132,6 +141,7 @@ return {
 			documentation = {
 				auto_show = false,
 				auto_show_delay_ms = 200,
+				treesitter_highlighting = true,
 				window = {
 					border = "rounded",
 				},
@@ -140,55 +150,64 @@ return {
 				enabled = false,
 			},
 		},
-		appearance = {
-			-- Sets the fallback highlight groups to nvim-cmp's highlight groups
-			-- Useful for when your theme doesn't support blink.cmp
-			-- will be removed in a future release
-			use_nvim_cmp_as_default = false,
-			-- Set to 'mono' for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
-			-- Adjusts spacing to ensure icons are aligned
-			nerd_font_variant = "mono",
-			kind_icons = {
-				Text = "󰉿",
-				Method = "󰊕",
-				Function = "󰊕",
-				Constructor = "󰒓",
-
-				Field = "󰜢",
-				Variable = "󰆦",
-				Property = "󰖷",
-
-				Class = "󱡠",
-				Interface = "󱡠",
-				Struct = "󱡠",
-				Module = "󰅩",
-
-				Unit = "󰪚",
-				Value = "󰦨",
-				Enum = "󰦨",
-				EnumMember = "󰦨",
-
-				Keyword = "󰻾",
-				Constant = "󰏿",
-
-				Snippet = "󱄽",
-				Color = "󰏘",
-				File = "󰈔",
-				Reference = "󰬲",
-				Folder = "󰉋",
-				Event = "󱐋",
-				Operator = "󰪚",
-				TypeParameter = "󰬛",
-			},
-		},
+		-- appearance = {
+		-- 	-- Sets the fallback highlight groups to nvim-cmp's highlight groups
+		-- 	-- Useful for when your theme doesn't support blink.cmp
+		-- 	-- will be removed in a future release
+		-- 	use_nvim_cmp_as_default = false,
+		-- 	-- Set to 'mono' for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
+		-- 	-- Adjusts spacing to ensure icons are aligned
+		-- 	nerd_font_variant = "mono",
+		-- 	kind_icons = {
+		-- 		Text = "󰉿",
+		-- 		Method = "󰊕",
+		-- 		Function = "󰊕",
+		-- 		Constructor = "󰒓",
+		--
+		-- 		Field = "󰜢",
+		-- 		Variable = "󰆦",
+		-- 		Property = "󰖷",
+		--
+		-- 		Class = "󱡠",
+		-- 		Interface = "󱡠",
+		-- 		Struct = "󱡠",
+		-- 		Module = "󰅩",
+		--
+		-- 		Unit = "󰪚",
+		-- 		Value = "󰦨",
+		-- 		Enum = "󰦨",
+		-- 		EnumMember = "󰦨",
+		--
+		-- 		Keyword = "󰻾",
+		-- 		Constant = "󰏿",
+		--
+		-- 		Snippet = "󱄽",
+		-- 		Color = "󰏘",
+		-- 		File = "󰈔",
+		-- 		Reference = "󰬲",
+		-- 		Folder = "󰉋",
+		-- 		Event = "󱐋",
+		-- 		Operator = "󰪚",
+		-- 		TypeParameter = "󰬛",
+		-- 	},
+		-- },
 		-- default list of enabled providers defined so that you can extend it
 		-- elsewhere in your config, without redefining it, via `opts_extend`
 		sources = {
-			completion = {
-				enabled_providers = { "lsp", "path", "snippets", "buffer" },
-			},
-			-- optionally disable cmdline completions
-			cmdline = {},
+			default = { "lsp", "path", "snippets", "buffer" },
+
+			-- 	cmdline = function()
+			-- 		local type = vim.fn.getcmdtype()
+			-- 		-- Search forward and backward
+			-- 		if type == "/" or type == "?" then
+			-- 			return { "buffer" }
+			-- 		end
+			-- 		-- Commands
+			-- 		if type == ":" then
+			-- 			return { "cmdline" }
+			-- 		end
+			-- 		return {}
+			-- 	end,
 		},
 
 		-- experimental signature help support
@@ -201,6 +220,5 @@ return {
 
 		-- allows extending the providers array elsewhere in your config
 		-- without having to redefine it
-		opts_extend = { "sources.default" },
 	},
 }
