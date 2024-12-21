@@ -3,9 +3,7 @@ return {
 	prilrity = 1000,
 	lazy = false,
 	opts = {
-		dashboard = {
-			enabled = true,
-		},
+		dashboard = {},
 		statuscolumn = {},
 		zen = {},
 		scope = {},

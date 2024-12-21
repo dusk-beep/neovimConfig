@@ -1,1 +1,1 @@
-### neovim config made with lazy.nvim
+# neovim config made with lazy.nvim

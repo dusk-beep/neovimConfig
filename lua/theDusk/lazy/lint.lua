@@ -11,6 +11,7 @@ return {
 			css = { "stylelint" },
 			json = { "jsonlint" },
 			sh = { "shellcheck" },
+			markdown = { "markdownlint-cli2" },
 		}
 
 		-- Automatically lint on save
