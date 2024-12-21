@@ -11,6 +11,7 @@ return {
 		scope = {},
 		toggle = {},
 		lazygit = {},
+		notifier = {},
 		indent = {
 			only_scope = true,
 			only_current = true,
@@ -98,6 +99,20 @@ return {
 				Snacks.lazygit.log()
 			end,
 			desc = "Lazygit Log (cwd)",
+		},
+		{
+			"<leader>n",
+			function()
+				Snacks.notifier.show_history()
+			end,
+			desc = "Notification History",
+		},
+		{
+			"<leader>un",
+			function()
+				Snacks.notifier.hide()
+			end,
+			desc = "Dismiss All Notifications",
 		},
 	},
 }
